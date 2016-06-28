@@ -42,8 +42,20 @@ if ( ! class_exists( 'Jetpack_Contact_Info_Widget' ) ) {
 		 * Enqueue scripts and styles.
 		 */
 		public function enqueue_scripts() {
+			/**
+			 * Set a Google Maps API Key.
+			 *
+			 * @since 4.1.0
+			 *
+			 * @param string $key Google Maps API Key
+			 */
+			$api = apply_filters( 'jetpack_google_maps_api_key', null );
+			$google_url = 'https://maps.googleapis.com/maps/api/js?sensor=false';
+			if ( $api ) {
+				$google_url = add_query_arg( 'key', $api, $google_url );
+			}
 			wp_enqueue_script( 'jquery' );
-			wp_enqueue_script( 'google-maps', 'https://maps.googleapis.com/maps/api/js?sensor=false' );
+			wp_enqueue_script( 'google-maps', esc_url( $google_url ) );
 			wp_enqueue_script( 'contact-info-map-js', plugins_url( 'contact-info/contact-info-map.js', __FILE__ ), array( 'jquery', 'google-maps' ), 20150127 );
 			wp_enqueue_style( 'contact-info-map-css', plugins_url( 'contact-info/contact-info-map.css', __FILE__ ), null, 20150127 );
 		}
